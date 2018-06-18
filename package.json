@@ -18,7 +18,7 @@
     "gatsby-transformer-sharp": "^1.6.21",
     "lodash": "^4.17.5",
     "lodash-webpack-plugin": "^0.11.4",
-    "netlify-cms": "^1.7.0",
+    "netlify-cms": "git://github.com/campjefferson/netlify-cms.git#master",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-helmet": "^5.2.0",
@@ -38,6 +38,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "prettier": "^1.7.4"
+    "prettier": "^1.7.4",
+    "sharp": "^0.20.3"
   }
 }
