@@ -32,7 +32,7 @@ CustomPageTemplate.propTypes = {
 
 const CustomPage = ({ data }) => {
   const { markdownRemark: post } = data
-console.log('chunk',post.frontmatter.chunk)
+  console.log('chunk',post.frontmatter.chunk)
   return (
     <CustomPageTemplate
       chunk={post.frontmatter.chunk}
@@ -53,6 +53,12 @@ export const customPageQuery = graphql`
       html
       frontmatter {
         title
+        chunk {
+          label
+          name
+          text
+          widget
+        }
       }
     }
   }
