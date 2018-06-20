@@ -12,11 +12,15 @@ const objectWidgetMap = new Map([
 ]);
 
 export class CustomPageTemplate extends React.Component {
-  static getTemplateFromControl = (control, i) => {
+  static getTemplateFromControl = (control, i, customPageProps) => {
     const isObjectWidget = control.widget === 'object';
     const Template = isObjectWidget ?
       objectWidgetMap.get(control.name) : widgetToComponentMap.get(control.widget);
-    const props = isObjectWidget ? control[control.name] : control[control.widget];
+    let props = isObjectWidget ? control[control.name] : control[control.widget];
+    props = {
+      ...props,
+      getAsset: customPageProps.getAsset
+    };
     return <Template {...props} key={i} />;
   };
 
@@ -35,7 +39,7 @@ export class CustomPageTemplate extends React.Component {
                 <h2 className="title is-size-3 has-text-weight-bold is-bold-light">
                   {title}
                 </h2>
-                {controls.map((control, i) => CustomPageTemplate.getTemplateFromControl(control, i))}
+                {controls.map((control, i) => CustomPageTemplate.getTemplateFromControl(control, i, this.props))}
               </div>
             </div>
           </div>
@@ -48,6 +52,7 @@ export class CustomPageTemplate extends React.Component {
 CustomPageTemplate.propTypes = {
   chunks: PropTypes.any,
   title: PropTypes.string.isRequired,
+  widgetFor: PropTypes.func,
 }
 
 const CustomPage = ({ data }) => {
