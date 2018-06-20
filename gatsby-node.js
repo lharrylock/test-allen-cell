@@ -18,6 +18,12 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
               tags
               templateKey
               title
+              chunk {
+                label
+                name
+                text
+                widget
+              }
             }
           }
         }
@@ -38,7 +44,6 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
       if (edge.node.frontmatter.templateKey === 'custom-page') {
         pagePath = `/${edge.node.frontmatter.title.toLowerCase()}/`;
       }
-      console.log(`templateKey: ${edge.node.frontmatter.templateKey}, path: ${pagePath}`)
       const id = edge.node.id
       createPage({
         path: pagePath,

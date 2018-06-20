@@ -1,41 +1,60 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Content, { HTMLContent } from '../components/Content'
+import ImageAndCaption from './widgetTemplates/image-and-caption';
 
-export const CustomPageTemplate = ({title, chunk}) => {
-  //const PageContent = contentComponent || Content
-//console.log(chunk)
-  return (
-    <section className="section section--gradient">
-      <div className="container">
-        <div className="columns">
-          <div className="column is-10 is-offset-1">
-            <div className="section">
-              <h2 className="title is-size-3 has-text-weight-bold is-bold-light">
-                {title}
-              </h2>
-              {/*<PageContent className="content" content={content} />*/}
+// todo TS enum instead of strings
+const widgetToComponentMap = new Map([
+  // todo bad way of assigning keys
+  ['text', (text) => <p key={text}>{text}</p>],
+]);
+const objectWidgetMap = new Map([
+  ['imageAndCaption', ImageAndCaption]
+]);
+
+export class CustomPageTemplate extends React.Component {
+  static getTemplateFromControl = (control, i) => {
+    const isObjectWidget = control.widget === 'object';
+    const Template = isObjectWidget ?
+      objectWidgetMap.get(control.name) : widgetToComponentMap.get(control.widget);
+    const props = isObjectWidget ? control[control.name] : control[control.widget];
+    return <Template {...props} key={i} />;
+  };
+
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const {title, chunks: controls} = this.props;
+    return (
+      <section className="section section--gradient">
+        <div className="container">
+          <div className="columns">
+            <div className="column is-10 is-offset-1">
+              <div className="section">
+                <h2 className="title is-size-3 has-text-weight-bold is-bold-light">
+                  {title}
+                </h2>
+                {controls.map((control, i) => CustomPageTemplate.getTemplateFromControl(control, i))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  )
+      </section>
+    )
+  }
 }
 
 CustomPageTemplate.propTypes = {
-  chunk: PropTypes.any,
+  chunks: PropTypes.any,
   title: PropTypes.string.isRequired,
-  // content: PropTypes.string,
-  // contentComponent: PropTypes.func,
 }
 
 const CustomPage = ({ data }) => {
   const { markdownRemark: post } = data
-  console.log('chunk',post.frontmatter.chunk)
   return (
     <CustomPageTemplate
-      chunk={post.frontmatter.chunk}
+      chunks={post.frontmatter.chunk}
       title={post.frontmatter.title}
     />
   )
