@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import CMS from 'netlify-cms';
-import { noop } from 'lodash';
 
 const imageAndCaption = (props) => {
+  props = props || {}
+  console.log(props);
   const Image = CMS.getWidget('image').preview;
   const {
     caption,
@@ -12,22 +13,17 @@ const imageAndCaption = (props) => {
   } = props;
   return (
     <div>
+      <div>caption: {caption || ''}</div>
+      <div>image: {image || ''}</div>
       <Image value={image} getAsset={getAsset}/>
-      <div>{caption}</div>
     </div>
   );
 };
 
-imageAndCaption.propTypes = {
+imageAndCaption.propTypes  = {
   getAsset: PropTypes.func.isRequired,
   image: PropTypes.node,
   caption: PropTypes.node
-};
-
-imageAndCaption.defaultProps = {
-  getAsset: noop,
-  image: '',
-  caption: ''
 };
 
 export default imageAndCaption;
