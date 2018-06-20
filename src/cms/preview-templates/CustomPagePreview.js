@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import { CustomPageTemplate } from '../../templates/custom-page';
 
 const CustomPagePreview = ({ entry }) => {
-  const chunk = entry.getIn(['data', 'chunk'])
-  if (chunk)
-    console.log(chunk.getIn(['data', 'text']))
+  const chunks = entry.getIn(['data', 'chunk']);
   return (
     <CustomPageTemplate
       title={entry.getIn(['data', 'title'])}
-      chunk={entry.getIn(['data', 'chunk'])}
+      chunks={chunks ? chunks.toJS() : []}
     />
   )
 }

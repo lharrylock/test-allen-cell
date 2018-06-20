@@ -44,6 +44,12 @@ collections:
           - {label: "Select", name: "select", widget: "select", options: ["a", "b", "c"]}
           - {label: "Select (Object)", name: "select_object", widget: "select", options: [{ label: "Chicago", value: "ORD" },{ label: "Paris", value: "CDG" },{ label: "Tokyo", value: "HND" }]}
           - {label: "Related Post", name: "relation", widget: "relationKitchenSinkPost", collection: "posts", searchFields: ["title", "body"], valueField: "title"}
+          - label: "Image and Caption"
+            name: "imageAndCaption"
+            widget: "object"
+            fields:
+              - {label: "Image", name: "image", widget: "image"}
+              - {label: "Caption", name: "caption", widget: "text"}
           - label: "Profile"
             name: "profile"
             widget: "object"
