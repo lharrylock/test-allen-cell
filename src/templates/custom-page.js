@@ -3,26 +3,24 @@ import PropTypes from 'prop-types'
 
 import ImageAndCaptionTemplate from './image-and-caption';
 
+export const SectionTemplate = ({controls}) => (
+  <div className="parent">
+    {controls.map((control, i) => (
+      <div key={i} className="section-group">
+        {control}
+      </div>
+    ))}
+  </div>
+);
+
 export const CustomPageTemplate = ({title, chunks: controls}) => {
   return (
-    <section className="section section--gradient">
-      <div className="container">
-        <div className="columns">
-          <div className="column is-10 is-offset-1">
-            <div className="section">
-              <h2 className="title is-size-3 has-text-weight-bold is-bold-light">
-                {title}
-              </h2>
-              {controls.map((control, i) => (
-                  <div key={i} className="test">
-                      {control}
-                  </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <div className="custom-page">
+      <h2 className="title is-size-3 has-text-weight-bold is-bold-light">
+        {title}
+      </h2>
+      <SectionTemplate controls={controls}/>
+    </div>
   )
 };
 

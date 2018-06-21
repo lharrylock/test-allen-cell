@@ -3,8 +3,7 @@ import React from 'react';
 import CMS from 'netlify-cms';
 
 const imageAndCaption = (props) => {
-  props = props || {}
-  console.log(props);
+  props = props || {};
   const Image = CMS.getWidget('image').preview;
   const {
     caption,

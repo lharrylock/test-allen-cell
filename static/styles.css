@@ -1,0 +1,6 @@
+.section-group:nth-child(2) {
+    background-color: pink;
+}
+.section-group {
+    padding: 24px;
+}
