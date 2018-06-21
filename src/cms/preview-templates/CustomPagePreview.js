@@ -8,35 +8,70 @@ const objectPreviewMap = new Map([
     ['imageAndCaption', ImageAndCaptionPreview]
 ]);
 
+
+
+const getChunksPreview = (widgets, getAsset) => {
+  if (widgets) {
+    widgets = widgets
+      .filter(w => !!w);
+    let result = [];
+    widgets
+      .forEach((w, i) => {
+        console.log(w.toJS())
+        let Preview, props;
+        const widgetName = w.get('widget') || '?';
+        const widget = CMS.getWidget(widgetName);
+        const name = w.get('name') || '?';
+        if (widget && widgetName !== 'object' && widgetName !== 'list') {
+          Preview = widget.preview;
+          props = {value: w.get(widgetName)};
+          props = {
+            ...props,
+            getAsset
+          };
+
+          if (Preview) {
+            result.push(<Preview {...props} key={i} />)
+          } else {
+            console.warn(`Warning: no preview component registered for widget of type: ${widgetName}, name: ${name}`);
+          }
+
+        } else if (widgetName === 'list' && name === 'chunk') {
+          if (w.get(name)) {
+            console.log('test')
+            result.push(...getChunksPreview(w.get(name), getAsset));
+          }
+        } else {
+          Preview = objectPreviewMap.get(name);
+          props = w.get(name);
+          props = props ? props.toJS() : null;
+
+          props = {
+            ...props,
+            getAsset
+          };
+
+          if (Preview) {
+            result.push(<Preview {...props} key={i} />)
+          } else {
+            console.warn(`Warning: no preview component registered for widget of type: ${widgetName}, name: ${name}`);
+          }
+        }
+
+      });
+    widgets = result;
+  }
+
+  return widgets;
+};
+
 const CustomPagePreview = ({ entry, getAsset, widgetsFor }) => {
   let widgets = widgetsFor('chunk');
   if (widgets) {
-    widgets = widgets
-        .filter(w => !!w)
-        .map((w, i) => {
-            let Preview, props;
-            const widgetName = w.getIn(['data', 'widget']) || '?';
-            const widget = CMS.getWidget(widgetName);
-            const name = w.getIn(['data', 'name']) || '?';
-
-            if (widget && widgetName !== 'object') {
-                Preview = widget.preview;
-                props = {value: w.getIn(['data', widgetName])};
-            } else {
-                Preview = objectPreviewMap.get(name);
-                props = w.getIn(['data', name]);
-                props = props ? props.toJS() : null;
-            }
-            props = {
-                ...props,
-                getAsset
-            };
-
-            return Preview ? (
-                <Preview {...props} key={i} />
-            ) : <div>{`Warning: no preview component registered for widget of type: ${widgetName}, name: ${name}`}</div>;
-    });
+    widgets = widgets.map(w => w.get('data'));
+    widgets = getChunksPreview(widgets, getAsset);
   }
+
   return (
     <CustomPageTemplate
       title={entry.getIn(['data', 'title'] || '')}
@@ -52,6 +87,6 @@ CustomPagePreview.propTypes = {
   }),
   widgetsFor: PropTypes.func,
   getAsset: PropTypes.func,
-}
+};
 
 export default CustomPagePreview
