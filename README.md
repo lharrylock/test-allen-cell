@@ -83,18 +83,23 @@ In the query editor, copy the following and press the play button to see the res
 
 
 query CustomPage($id: String!) {
-    markdownRemark(id: { eq: $id }) {
-      html
-      frontmatter {
-        title
-        chunk {
-          label
-          name
-          text
-          widget
+     markdownRemark(id: { eq: $id }) {
+          html
+          frontmatter {
+            title
+            chunk {
+              name
+              widget
+              fields {
+                name
+              }
+              imageAndCaption {
+                  caption
+                  image
+                }
+            }
+          }
         }
-      }
-    }
   }
   
   {
