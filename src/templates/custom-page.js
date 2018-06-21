@@ -1,69 +1,50 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import ImageAndCaption from './widgetTemplates/image-and-caption';
 
-// todo TS enum instead of strings
-const widgetToComponentMap = new Map([
-  // todo bad way of assigning keys
-  ['text', (text) => <p key={text}>{text}</p>],
-]);
-const objectWidgetMap = new Map([
-  ['imageAndCaption', ImageAndCaption]
-]);
-
-export class CustomPageTemplate extends React.Component {
-  static getTemplateFromControl = (control, i, customPageProps) => {
-    const isObjectWidget = control.widget === 'object';
-    const Template = isObjectWidget ?
-      objectWidgetMap.get(control.name) : widgetToComponentMap.get(control.widget);
-    let props = isObjectWidget ? control[control.name] : control[control.widget];
-    props = {
-      ...props,
-      getAsset: customPageProps.getAsset
-    };
-    return <Template {...props} key={i} />;
-  };
-
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const {title, chunks: controls} = this.props;
-    return (
-      <section className="section section--gradient">
-        <div className="container">
-          <div className="columns">
-            <div className="column is-10 is-offset-1">
-              <div className="section">
-                <h2 className="title is-size-3 has-text-weight-bold is-bold-light">
-                  {title}
-                </h2>
-                {controls.map((control, i) => CustomPageTemplate.getTemplateFromControl(control, i, this.props))}
-              </div>
+export const CustomPageTemplate = ({title, chunks: controls}) => {
+  return (
+    <section className="section section--gradient">
+      <div className="container">
+        <div className="columns">
+          <div className="column is-10 is-offset-1">
+            <div className="section">
+              <h2 className="title is-size-3 has-text-weight-bold is-bold-light">
+                {title}
+              </h2>
+              {controls.map((control, i) => (
+                  <div key={i} className="test">
+                      {control}
+                  </div>
+              ))}
             </div>
           </div>
         </div>
-      </section>
-    )
-  }
-}
+      </div>
+    </section>
+  )
+};
 
 CustomPageTemplate.propTypes = {
   chunks: PropTypes.any,
   title: PropTypes.string.isRequired,
-  widgetFor: PropTypes.func,
-}
+};
+
+CustomPageTemplate.defaultProps = {
+  chunks: [],
+  title: '',
+};
 
 const CustomPage = ({ data }) => {
-  const { markdownRemark: post } = data
-  return (
-    <CustomPageTemplate
-      chunks={post.frontmatter.chunk}
-      title={post.frontmatter.title}
-    />
-  )
-}
+  const { markdownRemark: post } = data;
+console.log(post)
+    return <div>WIP</div>
+  // return (
+  //   <CustomPageTemplate
+  //     chunks={post.frontmatter.chunk}
+  //     title={post.frontmatter.title}
+  //   />
+  // )
+};
 
 CustomPage.propTypes = {
   data: PropTypes.object.isRequired,
@@ -78,10 +59,9 @@ export const customPageQuery = graphql`
       frontmatter {
         title
         chunk {
-          label
           name
-          text
           widget
+          
         }
       }
     }
