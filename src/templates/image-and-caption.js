@@ -4,7 +4,7 @@ import React from 'react';
 const imageAndCaptionTemplate = ({image, caption}) => (
     <div>
         {image && <img src={image} />}
-        <div>{caption}</div>
+        <div className="caption">Caption: {caption}</div>
     </div>
 );
 

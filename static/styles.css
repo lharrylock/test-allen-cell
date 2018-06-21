@@ -4,3 +4,7 @@
 .section-group {
     padding: 24px;
 }
+.caption {
+    color: grey;
+    font-size: 16px;
+}
