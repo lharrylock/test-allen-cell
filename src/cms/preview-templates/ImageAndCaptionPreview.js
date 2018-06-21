@@ -13,7 +13,7 @@ const imageAndCaption = (props) => {
   return (
     <div>
       <Image value={image} getAsset={getAsset}/>
-      <div>{caption || ''}</div>
+      <div className="caption">Caption: {caption || ''}</div>
     </div>
   );
 };
