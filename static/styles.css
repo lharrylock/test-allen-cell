@@ -1,4 +1,4 @@
-.section-group:nth-child(2) {
+.section-group:nth-child(even) {
     background-color: pink;
 }
 .section-group {

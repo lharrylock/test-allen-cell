@@ -44,28 +44,48 @@ const objectTemplateMap = new Map([
     ['imageAndCaption', ImageAndCaptionTemplate]
 ]);
 
+const getChunks = (chunks) => {
+  const result = [];
+  chunks
+    .filter(c => !!c)
+    .forEach((c, i) => {
+      let Template, props;
+      const widgetName = c.widget || '?';
+      const name = c.name || '?';
+
+      if (widgetName !== 'object' && widgetName !== 'list') {
+        Template = widgetNameToTemplateMap.get(widgetName);
+        props = {[widgetName]: c[widgetName]}
+
+        if (Template) {
+          result.push(<Template {...props} key={i} />)
+        } else {
+          console.warn(`Warning: no template for widgetName: ${widgetName}, name: ${name}`);
+        }
+
+      } else if (widgetName === 'list' && name === 'chunk') {
+        if (c[name]) {
+          result.push(...getChunks(c[name]));
+        }
+      } else {
+        Template = objectTemplateMap.get(name);
+        props = c[c.name];
+
+        if (Template) {
+          result.push(<Template {...props} key={i} />)
+        } else {
+          console.warn(`Warning: no template for widgetName: ${widgetName}, name: ${name}`);
+        }
+      }
+    });
+  return result;
+};
+
 const CustomPage = ({ data }) => {
   const { frontmatter } = data.markdownRemark;
   console.log(frontmatter.chunk)
-  const chunks = frontmatter.chunk
-      .filter(c => !!c)
-      .map((c, i) => {
-        let Template, props;
-        const widgetName = c.widget || '?';
-        const name = c.name || '?';
 
-        if (widgetName !== 'object') {
-          Template = widgetNameToTemplateMap.get(widgetName);
-          props = {[widgetName]: c[widgetName]}
-        } else {
-          Template = objectTemplateMap.get(name);
-          props = c[c.name];
-        }
-
-        return Template ?
-            <Template {...props} key={i} /> :
-            <div>`Warning: no template for widgetName: ${widgetName}, name: ${name}`</div>
-      });
+  const chunks = getChunks(frontmatter.chunk);
 
   return (
     <CustomPageTemplate
@@ -88,6 +108,17 @@ export const customPageQuery = graphql`
       frontmatter {
         title
         chunk {
+          chunk {
+            name
+            widget
+            text
+            imageAndCaption {
+              caption
+              image
+            }
+            markdown
+          }
+          image
           name
           widget
           text
