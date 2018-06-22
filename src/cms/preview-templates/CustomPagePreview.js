@@ -9,6 +9,33 @@ const objectPreviewMap = new Map([
     ['imageAndCaption', ImageAndCaptionPreview]
 ]);
 
+const getPreviewAndProps = (w, widgetName, name, getAsset) => {
+  let Preview, props;
+  const widget = CMS.getWidget(widgetName);
+  // Any widget registered with CMS such as Image, Text, Markdown, etc.
+  if (widget && widgetName !== 'object') {
+    Preview = widget.preview;
+    props = {
+      value: w.get(widgetName),
+      getAsset
+    };
+
+    // Objects should have custom previews registered in objectPreviewMap
+  } else {
+    Preview = objectPreviewMap.get(name);
+    props = w.get(name);
+    props = props ? props.toJS() : null;
+    props = {
+      ...props,
+      getAsset
+    };
+  }
+  return {
+    Preview,
+    props
+  };
+};
+
 const getChunksPreview = (widgets, getAsset) => {
   if (widgets) {
     let result = [];
@@ -24,27 +51,11 @@ const getChunksPreview = (widgets, getAsset) => {
             result.push(getChunksPreview(w.get(name).filter(w => !!w), getAsset));
           }
         } else {
-          let Preview, props;
-          const widget = CMS.getWidget(widgetName);
+          let {
+            Preview,
+            props
+          } = getPreviewAndProps(w, widgetName, name, getAsset);
 
-          // Any widget registered with CMS such as Image, Text, Markdown, etc.
-          if (widget && widgetName !== 'object') {
-            Preview = widget.preview;
-            props = {
-              value: w.get(widgetName),
-              getAsset
-            };
-
-          // Objects should have custom previews registered in objectPreviewMap
-          } else {
-            Preview = objectPreviewMap.get(name);
-            props = w.get(name);
-            props = props ? props.toJS() : null;
-            props = {
-              ...props,
-              getAsset
-            };
-          }
 
           if (Preview) {
             result.push(<Preview {...props} key={i} />)
