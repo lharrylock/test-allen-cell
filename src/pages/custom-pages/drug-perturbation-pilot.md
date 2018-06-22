@@ -91,7 +91,7 @@ page:
             label: Image and Caption
             name: imageAndCaption
             widget: object
-        orientation: true
+        orientation: false
       widget: object
     - label: Text
       name: text
