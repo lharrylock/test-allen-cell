@@ -3,15 +3,20 @@ import PropTypes from 'prop-types'
 
 import ImageAndCaptionTemplate from './image-and-caption';
 
-export const SectionTemplate = ({controls}) => (
-  <div className="parent">
-    {controls.map((control, i) => (
-      <div key={i} className="section-group">
-        {control}
-      </div>
-    ))}
-  </div>
-);
+export const SectionTemplate = ({controls, key}) => {
+  if (!Array.isArray(controls)) {
+    controls = [controls];
+  }
+  return (
+    <div className="section-group">
+      {controls.map((control, i) => (
+        <div key={`${key}${i}`} className="section-group-item">
+          {control}
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export const CustomPageTemplate = ({title, chunks: controls}) => {
   return (
@@ -19,7 +24,11 @@ export const CustomPageTemplate = ({title, chunks: controls}) => {
       <h2 className="title is-size-3 has-text-weight-bold is-bold-light">
         {title}
       </h2>
-      <SectionTemplate controls={controls}/>
+      <div className="custom-page-sections">
+        {controls.map((section, i) => (
+          <SectionTemplate key={i} controls={section}/>
+        ))}
+      </div>
     </div>
   )
 };

@@ -17,7 +17,6 @@ const getChunksPreview = (widgets, getAsset) => {
     let result = [];
     widgets
       .forEach((w, i) => {
-        console.log(w.toJS())
         let Preview, props;
         const widgetName = w.get('widget') || '?';
         const widget = CMS.getWidget(widgetName);
@@ -38,8 +37,7 @@ const getChunksPreview = (widgets, getAsset) => {
 
         } else if (widgetName === 'list' && name === 'chunk') {
           if (w.get(name)) {
-            console.log('test')
-            result.push(...getChunksPreview(w.get(name), getAsset));
+            result.push(getChunksPreview(w.get(name), getAsset));
           }
         } else {
           Preview = objectPreviewMap.get(name);
