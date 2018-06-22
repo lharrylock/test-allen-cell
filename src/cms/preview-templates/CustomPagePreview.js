@@ -11,8 +11,6 @@ const objectPreviewMap = new Map([
 
 const getChunksPreview = (widgets, getAsset) => {
   if (widgets) {
-    widgets = widgets
-      .filter(w => !!w);
     let result = [];
     widgets
       .forEach((w, i) => {
@@ -23,7 +21,7 @@ const getChunksPreview = (widgets, getAsset) => {
         // Lists are handled as a group of components
         if (widgetName === 'list' && name === 'chunk') {
           if (w.get(name)) {
-            result.push(getChunksPreview(w.get(name), getAsset));
+            result.push(getChunksPreview(w.get(name).filter(w => !!w), getAsset));
           }
         } else {
           let Preview, props;
@@ -64,7 +62,7 @@ const getChunksPreview = (widgets, getAsset) => {
 const CustomPagePreview = ({ entry, getAsset, widgetsFor }) => {
   let widgets = widgetsFor('chunk');
   if (widgets) {
-    widgets = widgets.map(w => w.get('data'));
+    widgets = widgets.filter(w => !!w).map(w => w.get('data'));
     widgets = getChunksPreview(widgets, getAsset);
   }
 
