@@ -4,11 +4,10 @@ import ImageAndCaptionPreview from "./ImageAndCaptionPreview";
 
 import { CustomPageTemplate } from '../../templates/custom-page';
 
+// Add custom object previews here if they do not have a widget registered to the CMS already
 const objectPreviewMap = new Map([
     ['imageAndCaption', ImageAndCaptionPreview]
 ]);
-
-
 
 const getChunksPreview = (widgets, getAsset) => {
   if (widgets) {
@@ -17,37 +16,37 @@ const getChunksPreview = (widgets, getAsset) => {
     let result = [];
     widgets
       .forEach((w, i) => {
-        let Preview, props;
+
         const widgetName = w.get('widget') || '?';
-        const widget = CMS.getWidget(widgetName);
         const name = w.get('name') || '?';
-        if (widget && widgetName !== 'object' && widgetName !== 'list') {
-          Preview = widget.preview;
-          props = {value: w.get(widgetName)};
-          props = {
-            ...props,
-            getAsset
-          };
 
-          if (Preview) {
-            result.push(<Preview {...props} key={i} />)
-          } else {
-            console.warn(`Warning: no preview component registered for widget of type: ${widgetName}, name: ${name}`);
-          }
-
-        } else if (widgetName === 'list' && name === 'chunk') {
+        // Lists are handled as a group of components
+        if (widgetName === 'list' && name === 'chunk') {
           if (w.get(name)) {
             result.push(getChunksPreview(w.get(name), getAsset));
           }
         } else {
-          Preview = objectPreviewMap.get(name);
-          props = w.get(name);
-          props = props ? props.toJS() : null;
+          let Preview, props;
+          const widget = CMS.getWidget(widgetName);
 
-          props = {
-            ...props,
-            getAsset
-          };
+          // Any widget registered with CMS such as Image, Text, Markdown, etc.
+          if (widget && widgetName !== 'object') {
+            Preview = widget.preview;
+            props = {
+              value: w.get(widgetName),
+              getAsset
+            };
+
+          // Objects should have custom previews registered in objectPreviewMap
+          } else {
+            Preview = objectPreviewMap.get(name);
+            props = w.get(name);
+            props = props ? props.toJS() : null;
+            props = {
+              ...props,
+              getAsset
+            };
+          }
 
           if (Preview) {
             result.push(<Preview {...props} key={i} />)
@@ -55,7 +54,6 @@ const getChunksPreview = (widgets, getAsset) => {
             console.warn(`Warning: no preview component registered for widget of type: ${widgetName}, name: ${name}`);
           }
         }
-
       });
     widgets = result;
   }
