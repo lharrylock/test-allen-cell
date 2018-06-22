@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 
 import ImageAndCaptionTemplate from './image-and-caption';
 
-export const SectionTemplate = ({controls, key}) => {
+export const SectionTemplate = ({controls}) => {
   if (!Array.isArray(controls)) {
     controls = [controls];
   }
   return (
     <div className="section-group">
       {controls.map((control, i) => (
-        <div key={`${key}${i}`} className="section-group-item">
+        <div key={`${i}`} className="section-group-item">
           {control}
         </div>
       ))}
