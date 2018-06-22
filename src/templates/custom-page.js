@@ -53,40 +53,49 @@ const objectTemplateMap = new Map([
   ['imageAndCaption', ImageAndCaptionTemplate]
 ]);
 
+const getTemplateAndProps = (w, widgetName, name) => {
+  let Template, props;
+
+  // Any widget registered with CMS such as Image, Text, Markdown, etc.
+  if (widgetName !== 'object' && widgetName !== 'list') {
+    Template = widgetNameToTemplateMap.get(widgetName);
+    props = {[widgetName]: w[widgetName]};
+
+    // Objects should have custom previews registered in objectPreviewMap
+  } else {
+    Template = objectTemplateMap.get(name);
+    props = w[name];
+  }
+
+  return {
+    Template,
+    props
+  };
+};
+
 const getChunks = (chunks) => {
   const result = [];
-  chunks
-    .filter(c => !!c)
-    .forEach((c, i) => {
-      let Template, props;
-      const widgetName = c.widget || '?';
-      const name = c.name || '?';
+  chunks.forEach((c, i) => {
+    const widgetName = c.widget || '?';
+    const name = c.name || '?';
 
-      if (widgetName !== 'object' && widgetName !== 'list') {
-        Template = widgetNameToTemplateMap.get(widgetName);
-        props = {[widgetName]: c[widgetName]};
-
-        if (Template) {
-          result.push(<Template {...props} key={i} />)
-        } else {
-          console.warn(`Warning: no template for widgetName: ${widgetName}, name: ${name}`);
-        }
-
-      } else if (widgetName === 'list' && name === 'chunk') {
-        if (c[name]) {
-          result.push(...getChunks(c[name]));
-        }
-      } else {
-        Template = objectTemplateMap.get(name);
-        props = c[c.name];
-
-        if (Template) {
-          result.push(<Template {...props} key={i} />)
-        } else {
-          console.warn(`Warning: no template for widgetName: ${widgetName}, name: ${name}`);
-        }
+    if (widgetName === 'list' && name === 'chunk') {
+      if (c[name]) {
+        result.push(getChunks(c[name]));
       }
-    });
+    } else {
+      let {
+        Template,
+        props
+      } = getTemplateAndProps(c, widgetName, name);
+
+      if (Template) {
+        result.push(<Template {...props} key={i} />)
+      } else {
+        console.warn(`Warning: no template for widgetName: ${widgetName}, name: ${name}`);
+      }
+    }
+  });
 
   return result;
 };
@@ -94,7 +103,7 @@ const getChunks = (chunks) => {
 const CustomPage = ({ data }) => {
   const { frontmatter } = data.markdownRemark;
 
-  const chunks = getChunks(frontmatter.chunk);
+  const chunks = getChunks(frontmatter.chunk.filter(c => !!c));
 
   return (
     <CustomPageTemplate
