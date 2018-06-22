@@ -46,25 +46,30 @@ CustomPageTemplate.defaultProps = {
 const widgetNameToTemplateMap = new Map([
   ['image', (props) => <img src={props.image} />],
   ['text', (props) => <div>{props.text}</div>],
-  ['date', (props) => <div>{props.date}</div>]
-]);
-
-const objectTemplateMap = new Map([
+  ['markdown', (props) => <div>{props.markdown}</div>],
+  ['date', (props) => <div>{props.date}</div>],
   ['imageAndCaption', ImageAndCaptionTemplate]
 ]);
 
-const getTemplateAndProps = (w, widgetName, name) => {
+const getTemplateAndProps = (w) => {
   let Template, props;
 
-  // Any widget registered with CMS such as Image, Text, Markdown, etc.
-  if (widgetName !== 'object' && widgetName !== 'list') {
-    Template = widgetNameToTemplateMap.get(widgetName);
-    props = {[widgetName]: w[widgetName]};
+  let widgetName;
+  Object.keys(w).forEach(key => {
+    if (w[key] && !widgetName) {
+      widgetName = key;
+    }
+  });
 
-    // Objects should have custom previews registered in objectPreviewMap
+  widgetName = widgetName || 'text';
+  Template = widgetNameToTemplateMap.get(widgetName);
+  // todo hacky
+  if (widgetName === 'markdown') {
+    props = {[widgetName]: `${w[widgetName]}`};
+  } else if (typeof w[widgetName] === 'object') {
+    props = w[widgetName];
   } else {
-    Template = objectTemplateMap.get(name);
-    props = w[name];
+    props = {[widgetName]: w[widgetName]};
   }
 
   return {
@@ -76,23 +81,20 @@ const getTemplateAndProps = (w, widgetName, name) => {
 const getChunks = (chunks) => {
   const result = [];
   chunks.forEach((c, i) => {
-    const widgetName = c.widget || '?';
-    const name = c.name || '?';
-
-    if (widgetName === 'object' && name === 'page') {
-      if (c[name]) {
+    if (c.page) {
+      if (c.page.chunks && c.page.chunks.length > 0) {
         result.push(getChunks(c.page.chunks));
       }
     } else {
       let {
         Template,
         props
-      } = getTemplateAndProps(c, widgetName, name);
+      } = getTemplateAndProps(c);
 
       if (Template) {
         result.push(<Template {...props} key={i} />)
       } else {
-        console.warn(`Warning: no template for widgetName: ${widgetName}, name: ${name}`);
+        console.warn(`Warning: no template`);
       }
     }
   });
@@ -102,7 +104,6 @@ const getChunks = (chunks) => {
 
 const CustomPage = ({ data }) => {
   const { frontmatter } = data.markdownRemark;
-
   const chunks = getChunks(frontmatter.page.chunks.filter(c => !!c));
 
   return (
@@ -120,7 +121,7 @@ CustomPage.propTypes = {
 export default CustomPage
 
 export const customPageQuery = graphql`
-  query CustomPage($id: String!) {
+ query CustomPage($id: String!) {
      markdownRemark(id: { eq: $id }) {
       html
       frontmatter {
@@ -132,13 +133,14 @@ export const customPageQuery = graphql`
               orientation
               chunks {
                 text
-                imageAndCaption
+                imageAndCaption {
+                  image
+                  caption
+                }
                 markdown
               } 
             }
-            text
-            imageAndCaption
-            markdown    
+            text  
           }     
         }
       }
