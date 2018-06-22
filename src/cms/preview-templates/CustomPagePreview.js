@@ -44,9 +44,9 @@ const getChunksPreview = (widgets, getAsset) => {
     const name = w.get('name') || '?';
 
     // Lists are handled as a group of components
-    if (widgetName === 'list' && name === 'chunks') {
-      if (w.get(name)) {
-        result.push(getChunksPreview(w.get(name).filter(w => !!w), getAsset));
+    if (widgetName === 'object' && name === 'page') {
+      if (w.getIn([name, 'chunks'])) {
+        result.push(getChunksPreview(w.getIn([name, 'chunks']).filter(w => !!w), getAsset));
       }
     } else {
       let {
@@ -66,16 +66,26 @@ const getChunksPreview = (widgets, getAsset) => {
 };
 
 const CustomPagePreview = ({ entry, getAsset, widgetsFor }) => {
-  let widgets = widgetsFor('chunks');
-  if (widgets) {
-    widgets = widgets.filter(w => !!w).map(w => w.get('data'));
-    widgets = getChunksPreview(widgets, getAsset);
+  let pageWidget = widgetsFor('page');
+  let chunks = [];
+  if (pageWidget) {
+    let firstLevelChunks = pageWidget.getIn(['widgets', 'chunks']);
+
+    // todo ideally we would register a 'chunks' widget to the CMS and we could just render firstLevelChunks ?
+    console.log('firstLevelChunks', firstLevelChunks);
+    let rawChunks = firstLevelChunks.props.entry.getIn(['data', 'page', 'chunks']);
+    console.log(rawChunks ? rawChunks.toJS() : 'not defined');
+    if (rawChunks) {
+      rawChunks = rawChunks.filter(c => !!c);
+      chunks = getChunksPreview(rawChunks, getAsset);
+    }
+
   }
 
   return (
     <CustomPageTemplate
       title={entry.getIn(['data', 'title'] || '')}
-      chunks={widgets || []}
+      chunks={chunks}
     />
   )
 };

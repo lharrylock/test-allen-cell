@@ -79,9 +79,9 @@ const getChunks = (chunks) => {
     const widgetName = c.widget || '?';
     const name = c.name || '?';
 
-    if (widgetName === 'list' && name === 'chunks') {
+    if (widgetName === 'object' && name === 'page') {
       if (c[name]) {
-        result.push(getChunks(c[name]));
+        result.push(getChunks(c.page.chunks));
       }
     } else {
       let {
@@ -103,7 +103,7 @@ const getChunks = (chunks) => {
 const CustomPage = ({ data }) => {
   const { frontmatter } = data.markdownRemark;
 
-  const chunks = getChunks(frontmatter.chunk.filter(c => !!c));
+  const chunks = getChunks(frontmatter.page.chunks.filter(c => !!c));
 
   return (
     <CustomPageTemplate
@@ -125,29 +125,21 @@ export const customPageQuery = graphql`
       html
       frontmatter {
         title
-        chunk {
-          chunk {
-            name
-            widget
+        page {
+          orientation
+          chunks {
+            page {
+              orientation
+              chunks {
+                text
+                imageAndCaption
+                markdown
+              } 
+            }
             text
-            imageAndCaption {
-              caption
-              image
-            }
-            markdown
-          }
-          image
-          name
-          widget
-          text
-          date
-          fields {
-            name
-          }
-          imageAndCaption {
-              caption
-              image
-            }
+            imageAndCaption
+            markdown    
+          }     
         }
       }
     }
