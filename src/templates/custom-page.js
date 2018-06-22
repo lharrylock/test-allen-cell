@@ -1,5 +1,5 @@
-import React from 'react'
 import PropTypes from 'prop-types'
+import React from 'react'
 
 import ImageAndCaptionTemplate from './image-and-caption';
 
@@ -44,13 +44,13 @@ CustomPageTemplate.defaultProps = {
 };
 
 const widgetNameToTemplateMap = new Map([
-   ['image', (props) => <img src={props.image} />],
-    ['text', (props) => <div>{props.text}</div>],
-    ['date', (props) => <div>{props.date}</div>]
+  ['image', (props) => <img src={props.image} />],
+  ['text', (props) => <div>{props.text}</div>],
+  ['date', (props) => <div>{props.date}</div>]
 ]);
 
 const objectTemplateMap = new Map([
-    ['imageAndCaption', ImageAndCaptionTemplate]
+  ['imageAndCaption', ImageAndCaptionTemplate]
 ]);
 
 const getChunks = (chunks) => {
@@ -64,7 +64,7 @@ const getChunks = (chunks) => {
 
       if (widgetName !== 'object' && widgetName !== 'list') {
         Template = widgetNameToTemplateMap.get(widgetName);
-        props = {[widgetName]: c[widgetName]}
+        props = {[widgetName]: c[widgetName]};
 
         if (Template) {
           result.push(<Template {...props} key={i} />)
@@ -87,12 +87,12 @@ const getChunks = (chunks) => {
         }
       }
     });
+
   return result;
 };
 
 const CustomPage = ({ data }) => {
   const { frontmatter } = data.markdownRemark;
-  console.log(frontmatter.chunk)
 
   const chunks = getChunks(frontmatter.chunk);
 
@@ -106,7 +106,7 @@ const CustomPage = ({ data }) => {
 
 CustomPage.propTypes = {
   data: PropTypes.object.isRequired,
-}
+};
 
 export default CustomPage
 
@@ -143,4 +143,4 @@ export const customPageQuery = graphql`
       }
     }
   }
-`
+`;
