@@ -31,7 +31,7 @@ collections:
         label: "Page Layout"
         widget: "object"
         fields:
-          - {label: "Stack Page Sections Vertically", name: "orientation", widget: "boolean"}
+          - {label: "Stack Page Sections Vertically", name: "orientationIsVertical", widget: "boolean"}
           - name: "chunks"
             label: "Page Sections"
             widget: "list"
@@ -40,7 +40,7 @@ collections:
                 label: "Page Layout"
                 widget: "object"
                 fields:
-                  - {label: "Stack Page Sections Vertically", name: "orientation", widget: "boolean"}
+                  - {label: "Stack Page Sections Vertically", name: "orientationIsVertical", widget: "boolean"}
                   - name: "chunks"
                     label: "Page Sections"
                     label_singular: "Page Section Group Item"

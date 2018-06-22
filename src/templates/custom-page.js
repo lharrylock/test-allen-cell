@@ -23,7 +23,7 @@ export const CustomPageTemplate = ({title, page}) => {
   let className = "custom-page-sections";
   if (page.orientationIsVertical) {
     className = `${className} section-group-vertical`
-  }
+  }console.log(page.chunks)
   return (
     <div className="custom-page">
       <h2 className="title is-size-3 has-text-weight-bold is-bold-light">
@@ -89,12 +89,15 @@ const getTemplateAndProps = (w) => {
   };
 };
 
-const getChunks = (chunks) => {
+const getChunks = (chunks, justReturnComponents) => {
   const result = [];
   chunks.forEach((c, i) => {
     if (c.page) {
       if (c.page.chunks && c.page.chunks.length > 0) {
-        result.push(getChunks(c.page.chunks));
+        result.push({
+          components: getChunks(c.page.chunks, true),
+          orientationIsVertical: c.page.orientationIsVertical
+        });
       }
     } else {
       let {
@@ -103,7 +106,16 @@ const getChunks = (chunks) => {
       } = getTemplateAndProps(c);
 
       if (Template) {
-        result.push(<Template {...props} key={i} />)
+        let component = <Template {...props} key={i} />;
+        if (justReturnComponents) {
+          result.push(component);
+        } else {
+          result.push({
+            components: [component],
+            orientationIsVertical: true
+          });
+        }
+
       } else {
         console.warn(`Warning: no template`);
       }
@@ -115,11 +127,14 @@ const getChunks = (chunks) => {
 
 const CustomPage = ({ data }) => {
   const { frontmatter } = data.markdownRemark;
-  const chunks = getChunks(frontmatter.page.chunks.filter(c => !!c));
+  const chunks = getChunks(frontmatter.page.chunks.filter(c => !!c), false);
 
   return (
     <CustomPageTemplate
-      chunks={chunks}
+      page={{
+        chunks,
+        orientationIsVertical: frontmatter.page.orientationIsVertical
+      }}
       title={frontmatter.title}
     />
   )
@@ -138,10 +153,10 @@ export const customPageQuery = graphql`
       frontmatter {
         title
         page {
-          orientation
+          orientationIsVertical
           chunks {
             page {
-              orientation
+              orientationIsVertical
               chunks {
                 text
                 imageAndCaption {

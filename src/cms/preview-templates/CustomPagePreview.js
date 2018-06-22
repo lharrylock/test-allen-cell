@@ -48,7 +48,7 @@ const getChunksPreview = (widgets, getAsset, justReturnComponents) => {
       if (w.getIn([name, 'chunks'])) {
         result.push({
           components: getChunksPreview(w.getIn([name, 'chunks']).filter(w => !!w), getAsset, true),
-          orientationIsVertical: w.getIn([name, 'orientation'])
+          orientationIsVertical: w.getIn([name, 'orientationIsVertical'])
         });
       }
     } else {
@@ -86,7 +86,7 @@ const CustomPagePreview = ({ entry, getAsset, widgetsFor }) => {
 
     // todo ideally we would register a 'chunks' widget to the CMS and we could just render firstLevelChunks ?
     let rawChunks = firstLevelChunks.props.entry.getIn(['data', 'page', 'chunks']);
-    orientationIsVertical = firstLevelChunks.props.entry.getIn(['data', 'page', 'orientation']);
+    orientationIsVertical = firstLevelChunks.props.entry.getIn(['data', 'page', 'orientationIsVertical']);
     if (rawChunks) {
       rawChunks = rawChunks.filter(c => !!c);
       chunks = getChunksPreview(rawChunks, getAsset, false);

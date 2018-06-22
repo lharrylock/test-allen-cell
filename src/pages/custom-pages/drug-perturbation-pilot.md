@@ -5,7 +5,7 @@ page:
   chunks:
     - fields:
         - label: Stack Page Sections Vertically
-          name: orientation
+          name: orientationIsVertical
           widget: boolean
         - label: Page Sections
           label_singular: Page Section Group Item
@@ -91,7 +91,7 @@ page:
             label: Image and Caption
             name: imageAndCaption
             widget: object
-        orientation: true
+        orientationIsVertical: true
       widget: object
     - label: Text
       name: text
@@ -99,7 +99,7 @@ page:
       widget: text
     - fields:
         - label: Stack Page Sections Vertically
-          name: orientation
+          name: orientationIsVertical
           widget: boolean
         - label: Page Sections
           label_singular: Page Section Group Item
@@ -156,8 +156,8 @@ page:
             label: Image and Caption
             name: imageAndCaption
             widget: object
-        orientation: true
+        orientationIsVertical: true
       widget: object
-  orientation: true
+  orientationIsVertical: true
 ---
 
