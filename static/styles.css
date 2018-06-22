@@ -1,8 +1,16 @@
 .section-group:nth-child(even) {
     background-color: pink;
 }
-.section-group {
+.section-group, .custom-page-sections {
     padding: 24px;
+    display: flex;
+    flex-direction: row;
+}
+.section-group-vertical {
+    flex-direction: column;
+}
+.section-group-item {
+    padding: 12px;
 }
 .caption {
     color: grey;
