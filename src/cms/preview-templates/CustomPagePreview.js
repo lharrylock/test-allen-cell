@@ -37,7 +37,7 @@ const getPreviewAndProps = (w, widgetName, name, getAsset) => {
   };
 };
 
-const getChunksPreview = (widgets, getAsset) => {
+const getChunksPreview = (widgets, getAsset, justReturnComponents) => {
   let result = [];
   widgets.forEach((w, i) => {
     const widgetName = w.get('widget') || '?';
@@ -46,7 +46,10 @@ const getChunksPreview = (widgets, getAsset) => {
     // Lists are handled as a group of components
     if (widgetName === 'object' && name === 'page') {
       if (w.getIn([name, 'chunks'])) {
-        result.push(getChunksPreview(w.getIn([name, 'chunks']).filter(w => !!w), getAsset));
+        result.push({
+          components: getChunksPreview(w.getIn([name, 'chunks']).filter(w => !!w), getAsset, true),
+          orientationIsVertical: w.getIn([name, 'orientation'])
+        });
       }
     } else {
       let {
@@ -55,7 +58,16 @@ const getChunksPreview = (widgets, getAsset) => {
       } = getPreviewAndProps(w, widgetName, name, getAsset);
 
       if (Preview) {
-        result.push(<Preview {...props} key={i} />)
+        let component = <Preview {...props} key={i} />;
+        if (justReturnComponents) {
+          result.push(component)
+        } else {
+          result.push({
+            components: [component],
+            orientationIsVertical: true
+          })
+        }
+
       } else {
         console.warn(`Warning: no preview component registered for widget of type: ${widgetName}, name: ${name}`);
       }
@@ -77,15 +89,14 @@ const CustomPagePreview = ({ entry, getAsset, widgetsFor }) => {
     orientationIsVertical = firstLevelChunks.props.entry.getIn(['data', 'page', 'orientation']);
     if (rawChunks) {
       rawChunks = rawChunks.filter(c => !!c);
-      chunks = getChunksPreview(rawChunks, getAsset);
+      chunks = getChunksPreview(rawChunks, getAsset, false);
     }
   }
 
   return (
     <CustomPageTemplate
       title={entry.getIn(['data', 'title'] || '')}
-      chunks={chunks}
-      orientationIsVertical={orientationIsVertical}
+      page={{chunks, orientationIsVertical}}
     />
   )
 };

@@ -4,10 +4,6 @@ import React from 'react'
 import ImageAndCaptionTemplate from './image-and-caption';
 
 export const SectionTemplate = ({controls, orientationIsVertical}) => {
-  if (!Array.isArray(controls)) {
-    controls = [controls];
-  }
-
   let className = "section-group";
   if (orientationIsVertical) {
     className = `${className} section-group-vertical`
@@ -23,9 +19,9 @@ export const SectionTemplate = ({controls, orientationIsVertical}) => {
   );
 };
 
-export const CustomPageTemplate = ({title, chunks: controls, orientationIsVertical}) => {
+export const CustomPageTemplate = ({title, page}) => {
   let className = "custom-page-sections";
-  if (orientationIsVertical) {
+  if (page.orientationIsVertical) {
     className = `${className} section-group-vertical`
   }
   return (
@@ -34,8 +30,8 @@ export const CustomPageTemplate = ({title, chunks: controls, orientationIsVertic
         {title}
       </h2>
       <div className={className}>
-        {controls.map((section, i) => (
-          <SectionTemplate key={i} controls={section} orientationIsVertical={orientationIsVertical}/>
+        {page.chunks.map((section, i) => (
+          <SectionTemplate key={i} controls={section.components} orientationIsVertical={section.orientationIsVertical}/>
         ))}
       </div>
     </div>
@@ -43,8 +39,13 @@ export const CustomPageTemplate = ({title, chunks: controls, orientationIsVertic
 };
 
 CustomPageTemplate.propTypes = {
-  chunks: PropTypes.array,
-  orientationIsVertical: PropTypes.bool,
+  page: PropTypes.shape(PropTypes.shape({
+    chunks: PropTypes.arrayOf(PropTypes.shape({
+      components: PropTypes.arrayOf(PropTypes.element),
+      orientationIsVertical: PropTypes.bool
+    })),
+    orientationIsVertical: PropTypes.bool
+  })),
   title: PropTypes.string.isRequired,
 };
 
