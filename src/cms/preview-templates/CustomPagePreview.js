@@ -44,7 +44,7 @@ const getChunksPreview = (widgets, getAsset) => {
     const name = w.get('name') || '?';
 
     // Lists are handled as a group of components
-    if (widgetName === 'list' && name === 'chunk') {
+    if (widgetName === 'list' && name === 'chunks') {
       if (w.get(name)) {
         result.push(getChunksPreview(w.get(name).filter(w => !!w), getAsset));
       }
@@ -66,7 +66,7 @@ const getChunksPreview = (widgets, getAsset) => {
 };
 
 const CustomPagePreview = ({ entry, getAsset, widgetsFor }) => {
-  let widgets = widgetsFor('chunk');
+  let widgets = widgetsFor('chunks');
   if (widgets) {
     widgets = widgets.filter(w => !!w).map(w => w.get('data'));
     widgets = getChunksPreview(widgets, getAsset);

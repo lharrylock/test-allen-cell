@@ -79,7 +79,7 @@ const getChunks = (chunks) => {
     const widgetName = c.widget || '?';
     const name = c.name || '?';
 
-    if (widgetName === 'list' && name === 'chunk') {
+    if (widgetName === 'list' && name === 'chunks') {
       if (c[name]) {
         result.push(getChunks(c[name]));
       }
