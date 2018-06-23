@@ -37,7 +37,7 @@ collections:
             widget: "list"
             types:
               - name: "page"
-                label: "Page Layout"
+                label: "Page Section"
                 widget: "object"
                 fields:
                   - {label: "Stack Page Sections Vertically", name: "orientation", widget: "boolean"}

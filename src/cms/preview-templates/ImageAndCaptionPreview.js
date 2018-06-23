@@ -11,8 +11,8 @@ const imageAndCaption = (props) => {
     image
   } = props;
   return (
-    <div>
-      <Image value={image} getAsset={getAsset}/>
+    <div className="image-and-caption">
+      <Image className="image" value={image} getAsset={getAsset}/>
       <div className="caption">Caption: {caption || ''}</div>
     </div>
   );
