@@ -15,7 +15,7 @@ export class ColorControl extends React.Component{
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.state = {
-      selected: this.props.value || COLORS[0]
+      selected: this.props.value || null
     }
   }
 
@@ -37,6 +37,12 @@ export class ColorControl extends React.Component{
               onClick={this.handleChange(c)}
             />
           ))}
+          <div
+            className={`color-square none ${!this.state.selected ? 'selected' : ''}`}
+            onClick={this.handleChange(null)}
+          >
+            <div className="line"/>
+          </div>
         </div>
       </div>
     );

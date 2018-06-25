@@ -15,6 +15,25 @@
       cursor: pointer;
     }
 
+    &.none {
+      border: 2px solid #dfdfe3;
+
+      &.selected {
+        border: 2px solid #3a69c7;
+
+        .line {
+          border-bottom: 2px solid #3a69c7;
+        }
+      }
+
+      .line {
+        border-bottom: 2px solid #dfdfe3;
+        height: 24px;
+        width: 30px;
+        transform: translateY(-11px) translateX(3px) rotate(45deg);
+      }
+    }
+
     &.dark-green {
       background-color: #799A8E;
     }
