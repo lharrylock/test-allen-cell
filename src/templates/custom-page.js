@@ -127,6 +127,7 @@ const getChunks = (chunks, justReturnComponents) => {
     if (c.page) {
       if (c.page.chunks && c.page.chunks.length > 0) {
         result.push({
+          color: c.page.sectionColor,
           components: getChunks(c.page.chunks, true),
           orientationIsVertical: c.page.orientationIsVertical
         });
@@ -160,12 +161,10 @@ const getChunks = (chunks, justReturnComponents) => {
 const CustomPage = ({ data }) => {
   const { frontmatter } = data.markdownRemark;
   const chunks = getChunks(frontmatter.page.chunks.filter(c => !!c), false);
-  const color = frontmatter.page.color;
-console.log(frontmatter.page.color)
+console.log(frontmatter.page)
   return (
     <CustomPageTemplate
       page={{
-        color,
         chunks,
         orientationIsVertical: frontmatter.page.orientationIsVertical
       }}
@@ -188,10 +187,10 @@ export const customPageQuery = graphql`
         title
         page {
           orientationIsVertical
-          color
           chunks {
             page {
               orientationIsVertical
+              sectionColor
               chunks {
                 text
                 imageAndCaption {
