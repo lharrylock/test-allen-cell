@@ -158,6 +158,6 @@ page:
             widget: object
         orientation: true
       widget: object
-  orientation: true
+  orientationIsVertical: true
 ---
 
