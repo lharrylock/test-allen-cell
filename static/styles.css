@@ -16,3 +16,17 @@
     color: grey;
     font-size: 16px;
 }
+
+
+/*image and caption*/
+.image-and-caption {
+    text-align: center;
+}
+
+.image-and-caption .image {
+    display: inline-block;
+}
+
+.image-and-caption .caption {
+    text-align: justify;
+}
