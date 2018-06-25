@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import './custom-page.scss';
 
 import ImageAndCaptionTemplate from './image-and-caption';
 
@@ -23,7 +24,7 @@ export const CustomPageTemplate = ({title, page}) => {
   let className = "custom-page-sections";
   if (page.orientationIsVertical) {
     className = `${className} section-group-vertical`
-  }console.log(page.chunks)
+  } console.log(page.chunks)
   return (
     <div className="custom-page">
       <h2 className="title is-size-3 has-text-weight-bold is-bold-light">

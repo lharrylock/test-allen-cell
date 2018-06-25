@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import CMS from 'netlify-cms';
+import '../../templates/image-and-caption.scss';
 
 const imageAndCaption = (props) => {
   props = props || {};
