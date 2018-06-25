@@ -7,10 +7,13 @@ import './custom-page.scss';
 
 import ImageAndCaptionTemplate from './image-and-caption';
 
-export const SectionTemplate = ({controls, orientationIsVertical}) => {
+export const SectionTemplate = ({controls, orientationIsVertical, color}) => {
   let className = "section-group";
   if (orientationIsVertical) {
     className = `${className} section-group-vertical`
+  }
+  if (color) {
+    className = `${className} ${color}`
   }
   return (
     <div className={className}>
@@ -26,8 +29,12 @@ export const SectionTemplate = ({controls, orientationIsVertical}) => {
 export const CustomPageTemplate = ({title, page}) => {
   let className = "custom-page-sections";
   if (page.orientationIsVertical) {
-    className = `${className} section-group-vertical`
+    className = `${className} section-group-vertical`;
   }
+  if (page.color) {
+    className = `${className} ${page.color}`;
+  }
+
   return (
     <div className="custom-page">
       <h2 className="title is-size-3 has-text-weight-bold is-bold-light">
@@ -35,7 +42,12 @@ export const CustomPageTemplate = ({title, page}) => {
       </h2>
       <div className={className}>
         {page.chunks.map((section, i) => (
-          <SectionTemplate key={i} controls={section.components} orientationIsVertical={section.orientationIsVertical}/>
+          <SectionTemplate
+            key={i}
+            controls={section.components}
+            orientationIsVertical={section.orientationIsVertical}
+            color={section.color}
+          />
         ))}
       </div>
     </div>
@@ -46,9 +58,11 @@ CustomPageTemplate.propTypes = {
   page: PropTypes.shape(PropTypes.shape({
     chunks: PropTypes.arrayOf(PropTypes.shape({
       components: PropTypes.arrayOf(PropTypes.element),
-      orientationIsVertical: PropTypes.bool
+      orientationIsVertical: PropTypes.bool,
+      color: PropTypes.string
     })),
-    orientationIsVertical: PropTypes.bool
+    orientationIsVertical: PropTypes.bool,
+    color: PropTypes.string
   })),
   title: PropTypes.string.isRequired,
 };
@@ -146,10 +160,12 @@ const getChunks = (chunks, justReturnComponents) => {
 const CustomPage = ({ data }) => {
   const { frontmatter } = data.markdownRemark;
   const chunks = getChunks(frontmatter.page.chunks.filter(c => !!c), false);
-
+  const color = frontmatter.page.color;
+console.log(frontmatter.page.color)
   return (
     <CustomPageTemplate
       page={{
+        color,
         chunks,
         orientationIsVertical: frontmatter.page.orientationIsVertical
       }}
@@ -172,6 +188,7 @@ export const customPageQuery = graphql`
         title
         page {
           orientationIsVertical
+          color
           chunks {
             page {
               orientationIsVertical

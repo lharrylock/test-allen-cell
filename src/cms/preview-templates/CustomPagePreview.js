@@ -48,7 +48,8 @@ const getChunksPreview = (widgets, getAsset, justReturnComponents) => {
       if (w.getIn([name, 'chunks'])) {
         result.push({
           components: getChunksPreview(w.getIn([name, 'chunks']).filter(w => !!w), getAsset, true),
-          orientationIsVertical: w.getIn([name, 'orientationIsVertical'])
+          orientationIsVertical: w.getIn([name, 'orientationIsVertical']),
+          color: w.getIn([name, 'sectionColor'])
         });
       }
     } else {

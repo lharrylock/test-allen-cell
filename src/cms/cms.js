@@ -8,9 +8,17 @@ import {
   ProductPagePreview,
 } from './preview-templates';
 
+import {ColorControl} from './widgets/ColorWidget';
+
+// style
 CMS.registerPreviewStyle(styles.toString(), { raw: true });
+
+// preview
 CMS.registerPreviewTemplate('about', AboutPagePreview);
 CMS.registerPreviewTemplate('products', ProductPagePreview);
 CMS.registerPreviewTemplate('blog', BlogPostPreview);
 CMS.registerPreviewTemplate('custom-page', CustomPagePreview);
+
+// widgets
+CMS.registerWidget('color', ColorControl);
 

@@ -41,6 +41,9 @@ collections:
                 widget: "object"
                 fields:
                   - {label: "Stack Page Sections Vertically", name: "orientationIsVertical", widget: "boolean"}
+                  - name: "sectionColor"
+                    label: "Section Color"
+                    widget: "color"
                   - name: "chunks"
                     label: "Page Sections"
                     label_singular: "Page Section Group Item"

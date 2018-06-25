@@ -1,17 +1,45 @@
 .custom-page {
+  height: 100%;
+  width: 100%;
+
   .section-group {
+    width: 100%;
+    padding: 24px;
+
     &:nth-child(even) {
       background-color: pink;
     }
   }
 
   .section-group, .custom-page-sections {
-    padding: 24px;
     display: flex;
     flex-direction: row;
 
     &.section-group-vertical {
       flex-direction: column;
+    }
+
+    &.dark-green {
+      background-color: #799A8E;
+      color: white;
+    }
+
+    &.mint {
+      background-color: #B2D6CC;
+    }
+
+    &.red {
+      background-color: #E06769;
+      color: white;
+    }
+
+    &.white {
+      background-color: #FFFDF4;
+    }
+
+    &.teal {
+      background-color: #257D92;
+      color: white;
     }
   }
 
