@@ -1,5 +1,8 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React from 'react';
+import remark from 'remark';
+import recommended from 'remark-preset-lint-recommended';
+import remarkHtml from 'remark-html';
 import './custom-page.scss';
 
 import ImageAndCaptionTemplate from './image-and-caption';
@@ -24,7 +27,7 @@ export const CustomPageTemplate = ({title, page}) => {
   let className = "custom-page-sections";
   if (page.orientationIsVertical) {
     className = `${className} section-group-vertical`
-  } console.log(page.chunks)
+  }
   return (
     <div className="custom-page">
       <h2 className="title is-size-3 has-text-weight-bold is-bold-light">
@@ -63,24 +66,38 @@ const widgetNameToTemplateMap = new Map([
   ['imageAndCaption', ImageAndCaptionTemplate]
 ]);
 
-const getTemplateAndProps = (w) => {
-  let Template, props;
-
+const getWidgetName = (widget) => {
   let widgetName;
-  Object.keys(w).forEach(key => {
-    if (w[key] && !widgetName) {
+
+  Object.keys(widget).forEach(key => {
+    if (widget[key] && !widgetName) {
       widgetName = key;
     }
   });
 
-  widgetName = widgetName || 'text';
-  Template = widgetNameToTemplateMap.get(widgetName);
-  // todo hacky
+  return widgetName || 'text';
+};
+
+const getTemplateAndProps = (w) => {
+  let Template,
+    props = {},
+    widgetName = getWidgetName(w);
+
   if (widgetName === 'markdown') {
-    props = {[widgetName]: `${w[widgetName]}`};
+    let content = remark()
+      .use(recommended)
+      .use(remarkHtml)
+      .processSync( w[widgetName]).toString();
+    Template = (props) => (
+      <div dangerouslySetInnerHTML={{__html: content}}/>
+    );
+
   } else if (typeof w[widgetName] === 'object') {
+    Template = widgetNameToTemplateMap.get(widgetName);
     props = w[widgetName];
+
   } else {
+    Template = widgetNameToTemplateMap.get(widgetName);
     props = {[widgetName]: w[widgetName]};
   }
 
