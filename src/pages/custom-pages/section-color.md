@@ -172,12 +172,64 @@ page:
       page:
         chunks:
           - label: Markdown
-            markdown: |-
-              > yumm coffee
+            markdown: >-
+              > yumm
+              [coffee](https://app.netlify.com/sites/blissful-heyrovsky-bbe561/overview)
 
-              * coffee tastes good
-              * it's enjoyable in the morning
+              >
+
+              > it's so good
+
+
+              * coffee **tastes** good
+
+              * it's_ enjoyable_ in the `morning`
+
               * hi
+
+
+              # I'm an H1
+
+
+              ## I'm an H2
+
+
+              ![](/img/jumbotron.jpg)
+
+
+              ```
+
+              // preview
+
+              ```
+
+
+              ```
+
+              CMS.registerPreviewTemplate('about', AboutPagePreview);
+
+              ```
+
+
+              ```
+
+              CMS.registerPreviewTemplate('products', ProductPagePreview);
+
+              ```
+
+
+              ```
+
+              CMS.registerPreviewTemplate('blog', BlogPostPreview);
+
+              ```
+
+
+              ```
+
+              CMS.registerPreviewTemplate('custom-page', CustomPagePreview);
+
+              ```
             name: markdown
             widget: markdown
         sectionColor: teal
