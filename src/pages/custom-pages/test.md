@@ -7,8 +7,11 @@ page:
         - label: Stack Page Sections Vertically
           name: orientationIsVertical
           widget: boolean
-        - label: Page Sections
-          label_singular: Page Section Group Item
+        - label: Section Color
+          name: sectionColor
+          widget: color
+        - label: Page Section Items
+          label_singular: Page Section Item
           name: chunks
           types:
             - label: Text
@@ -25,32 +28,91 @@ page:
               name: imageAndCaption
               widget: object
             - label: Markdown
-              name: body
+              name: markdown
               widget: markdown
           widget: list
       label: Page Section
-      name: page
-      page:
+      name: section
+      section:
         chunks:
-          - body: |-
-              ## Heading 2
-
-              normal text here
-
-              * point 1
-              * point 2
-              * point 3
-            label: Markdown
-            name: body
-            widget: markdown
-        orientationIsVertical: false
+          - label: Text
+            name: text
+            text: boo
+            widget: text
+          - fields:
+              - label: Image
+                name: image
+                widget: image
+              - label: Caption
+                name: caption
+                widget: text
+            imageAndCaption:
+              caption: chemex
+              image: /img/chemex.jpg
+            label: Image and Caption
+            name: imageAndCaption
+            widget: object
+        orientationIsVertical: true
+        sectionColor: red
       widget: object
-    - body: |-
-        * text
-        * text
-        * text
-      label: Markdown
-      name: body
-      widget: markdown
+    - fields:
+        - label: Stack Page Sections Vertically
+          name: orientationIsVertical
+          widget: boolean
+        - label: Section Color
+          name: sectionColor
+          widget: color
+        - label: Page Section Items
+          label_singular: Page Section Item
+          name: chunks
+          types:
+            - label: Text
+              name: text
+              widget: text
+            - fields:
+                - label: Image
+                  name: image
+                  widget: image
+                - label: Caption
+                  name: caption
+                  widget: text
+              label: Image and Caption
+              name: imageAndCaption
+              widget: object
+            - label: Markdown
+              name: markdown
+              widget: markdown
+          widget: list
+      label: Page Section
+      name: section
+      section:
+        chunks:
+          - label: Text
+            name: text
+            text: asdf
+            widget: text
+          - label: Markdown
+            markdown: |-
+              * point 1
+              * point2
+              * point3
+            name: markdown
+            widget: markdown
+          - fields:
+              - label: Image
+                name: image
+                widget: image
+              - label: Caption
+                name: caption
+                widget: text
+            imageAndCaption:
+              caption: test
+              image: /img/coffee.png
+            label: Image and Caption
+            name: imageAndCaption
+            widget: object
+        sectionColor: mint
+      widget: object
+  orientationIsVertical: true
 ---
 
