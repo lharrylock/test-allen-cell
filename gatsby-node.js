@@ -54,6 +54,12 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
       })
     })
 
+    // create custom page base
+    createPage({
+      path: 'custom-pages',
+      component: path.resolve(`src/templates/custom-pages.js`)
+    });
+
     // Tag pages:
     let tags = []
     // Iterate through each post, putting all found tags into `tags`
