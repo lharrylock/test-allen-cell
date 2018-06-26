@@ -1,10 +1,24 @@
 import CMS from 'netlify-cms'
+import styles from '!css-loader!sass-loader!../../static/main.scss'
 
-import AboutPagePreview from './preview-templates/AboutPagePreview'
-import BlogPostPreview from './preview-templates/BlogPostPreview'
-import ProductPagePreview from './preview-templates/ProductPagePreview'
+import {
+  AboutPagePreview,
+  BlogPostPreview,
+  CustomPagePreview,
+  ProductPagePreview,
+} from './preview-templates';
 
-CMS.registerPreviewStyle('/styles.css')
-CMS.registerPreviewTemplate('about', AboutPagePreview)
-CMS.registerPreviewTemplate('products', ProductPagePreview)
-CMS.registerPreviewTemplate('blog', BlogPostPreview)
+import {ColorControl} from './widgets/ColorWidget';
+
+// style
+CMS.registerPreviewStyle(styles.toString(), { raw: true });
+
+// preview
+CMS.registerPreviewTemplate('about', AboutPagePreview);
+CMS.registerPreviewTemplate('products', ProductPagePreview);
+CMS.registerPreviewTemplate('blog', BlogPostPreview);
+CMS.registerPreviewTemplate('custom-page', CustomPagePreview);
+
+// widgets
+CMS.registerWidget('color', ColorControl);
+
