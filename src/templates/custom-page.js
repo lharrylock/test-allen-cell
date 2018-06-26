@@ -61,13 +61,15 @@ CustomPageTemplate.propTypes = {
       color: PropTypes.string
     })),
     orientationIsVertical: PropTypes.bool,
-    color: PropTypes.string
   })),
   title: PropTypes.string.isRequired,
 };
 
 CustomPageTemplate.defaultProps = {
-  chunks: [],
+  page: {
+    chunks: [],
+    orientationIsVertical: true
+  },
   title: '',
 };
 
@@ -120,36 +122,35 @@ const getTemplateAndProps = (w) => {
   };
 };
 
-const getChunks = (chunks, justReturnComponents) => {
+const getSectionItems = (items) => {
   const result = [];
-  chunks.forEach((c, i) => {
-    if (c.section) {
-      if (c.section.chunks && c.section.chunks.length > 0) {
-        result.push({
-          color: c.section.sectionColor,
-          components: getChunks(c.section.chunks, true),
-          orientationIsVertical: c.section.orientationIsVertical
-        });
-      }
+  items.forEach((item, i) => {
+    let {
+      Template,
+      props
+    } = getTemplateAndProps(item);
+
+    if (Template) {
+      let component = <Template {...props} key={i} />;
+      result.push(component);
+
     } else {
-      let {
-        Template,
-        props
-      } = getTemplateAndProps(c);
+      console.warn(`Warning: no template`);
+    }
+  });
+  return result;
+};
 
-      if (Template) {
-        let component = <Template {...props} key={i} />;
-        if (justReturnComponents) {
-          result.push(component);
-        } else {
-          result.push({
-            components: [component],
-            orientationIsVertical: true
-          });
-        }
-
-      } else {
-        console.warn(`Warning: no template`);
+const getSections = (chunks) => {
+  const result = [];
+  chunks.forEach((c) => {
+    if (c.chunks) {
+      if (c.chunks.length > 0) {
+        result.push({
+          color: c.sectionColor,
+          components: getSectionItems(c.chunks),
+          orientationIsVertical: c.orientationIsVertical
+        });
       }
     }
   });
@@ -159,7 +160,7 @@ const getChunks = (chunks, justReturnComponents) => {
 
 const CustomPage = ({ data }) => {
   const { frontmatter } = data.markdownRemark;
-  const chunks = getChunks(frontmatter.page.chunks.filter(c => !!c), false);
+  const chunks = getSections(frontmatter.page.chunks.filter(c => !!c));
   return (
     <CustomPageTemplate
       page={{
@@ -180,25 +181,21 @@ export default CustomPage
 export const customPageQuery = graphql`
  query CustomPage($id: String!) {
      markdownRemark(id: { eq: $id }) {
-      html
       frontmatter {
         title
         page {
           orientationIsVertical
           chunks {
-            section {
-              orientationIsVertical
-              sectionColor
-              chunks {
-                text
-                imageAndCaption {
-                  image
-                  caption
-                }
-                markdown
-              } 
-            }
-            text  
+            orientationIsVertical
+            sectionColor
+            chunks {
+              text
+              imageAndCaption {
+                image
+                caption
+              }
+              markdown
+            } 
           }     
         }
       }

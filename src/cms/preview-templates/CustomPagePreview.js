@@ -37,41 +37,35 @@ const getPreviewAndProps = (w, widgetName, name, getAsset) => {
   };
 };
 
-const getChunksPreview = (widgets, getAsset, justReturnComponents) => {
+const getSecondLevelComponents = (widgets, getAsset) => {
   let result = [];
   widgets.forEach((w, i) => {
     const widgetName = w.get('widget') || '?';
     const name = w.get('name') || '?';
 
-    // Lists are handled as a group of components
-    if (widgetName === 'object' && name === 'section') {
-      if (w.getIn([name, 'chunks'])) {
-        result.push({
-          components: getChunksPreview(w.getIn([name, 'chunks']).filter(w => !!w), getAsset, true),
-          orientationIsVertical: w.getIn([name, 'orientationIsVertical']),
-          color: w.getIn([name, 'sectionColor'])
-        });
-      }
+    let {
+      Preview,
+      props
+    } = getPreviewAndProps(w, widgetName, name, getAsset);
+
+    if (Preview) {
+      result.push(<Preview {...props} key={i} />);
     } else {
-      let {
-        Preview,
-        props
-      } = getPreviewAndProps(w, widgetName, name, getAsset);
+      console.warn(`Warning: no preview component registered for widget of type: ${widgetName}, name: ${name}`);
+    }
+  });
+  return result;
+};
 
-      if (Preview) {
-        let component = <Preview {...props} key={i} />;
-        if (justReturnComponents) {
-          result.push(component)
-        } else {
-          result.push({
-            components: [component],
-            orientationIsVertical: true
-          })
-        }
-
-      } else {
-        console.warn(`Warning: no preview component registered for widget of type: ${widgetName}, name: ${name}`);
-      }
+const getChunksPreview = (widgets, getAsset) => {
+  let result = [];
+  widgets.forEach((w) => {
+    if (w.get('chunks')) {
+      result.push({
+        components: getSecondLevelComponents(w.get('chunks').filter(w => !!w), getAsset),
+        orientationIsVertical: w.get('orientationIsVertical'),
+        color: w.get('sectionColor')
+      });
     }
   });
 

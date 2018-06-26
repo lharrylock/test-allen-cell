@@ -35,36 +35,24 @@ collections:
           - name: "chunks"
             label: "Page Sections"
             widget: "list"
-            types:
-              - name: "section"
-                label: "Page Section"
-                widget: "object"
-                fields:
-                  - {label: "Stack Page Sections Vertically", name: "orientationIsVertical", widget: "boolean"}
-                  - name: "sectionColor"
-                    label: "Section Color"
-                    widget: "color"
-                  - name: "chunks"
-                    label: "Page Section Items"
-                    label_singular: "Page Section Item"
-                    widget: "list"
-                    types:
-                      - {label: "Text", name: "text", widget: "text"}
-                      - label: "Image and Caption"
-                        name: "imageAndCaption"
-                        widget: "object"
-                        fields:
-                          - {label: "Image", name: "image", widget: "image"}
-                          - {label: "Caption", name: "caption", widget: "text"}
-                      - {label: "Markdown", name: "markdown", widget: "markdown"}
-              - {label: "Text", name: "text", widget: "text"}
-              - label: "Image and Caption"
-                name: "imageAndCaption"
-                widget: "object"
-                fields:
-                  - {label: "Image", name: "image", widget: "image"}
-                  - {label: "Caption", name: "caption", widget: "text"}
-              - {label: "Markdown", name: "markdown", widget: "markdown"}
+            fields:
+              - {label: "Stack Page Sections Vertically", name: "orientationIsVertical", widget: "boolean"}
+              - name: "sectionColor"
+                label: "Section Color"
+                widget: "color"
+              - name: "chunks"
+                label: "Page Section Items"
+                label_singular: "Page Section Item"
+                widget: "list"
+                types:
+                  - {label: "Text", name: "text", widget: "text"}
+                  - label: "Image and Caption"
+                    name: "imageAndCaption"
+                    widget: "object"
+                    fields:
+                      - {label: "Image", name: "image", widget: "image"}
+                      - {label: "Caption", name: "caption", widget: "text"}
+                  - {label: "Markdown", name: "markdown", widget: "markdown"}
 
   - name: "pages"
     label: "Pages"
