@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react';
 import remark from 'remark';
-import recommended from 'remark-preset-lint-recommended';
 import remarkHtml from 'remark-html';
 import './custom-page.scss';
 
@@ -99,9 +98,9 @@ const getTemplateAndProps = (w) => {
 
   if (widgetName === 'markdown') {
     let content = remark()
-      .use(recommended)
       .use(remarkHtml)
       .processSync( w[widgetName]).toString();
+
     Template = (props) => (
       <div dangerouslySetInnerHTML={{__html: content}}/>
     );
@@ -161,7 +160,6 @@ const getChunks = (chunks, justReturnComponents) => {
 const CustomPage = ({ data }) => {
   const { frontmatter } = data.markdownRemark;
   const chunks = getChunks(frontmatter.page.chunks.filter(c => !!c), false);
-console.log(frontmatter.page)
   return (
     <CustomPageTemplate
       page={{
