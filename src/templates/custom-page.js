@@ -123,12 +123,12 @@ const getTemplateAndProps = (w) => {
 const getChunks = (chunks, justReturnComponents) => {
   const result = [];
   chunks.forEach((c, i) => {
-    if (c.page) {
-      if (c.page.chunks && c.page.chunks.length > 0) {
+    if (c.section) {
+      if (c.section.chunks && c.section.chunks.length > 0) {
         result.push({
-          color: c.page.sectionColor,
-          components: getChunks(c.page.chunks, true),
-          orientationIsVertical: c.page.orientationIsVertical
+          color: c.section.sectionColor,
+          components: getChunks(c.section.chunks, true),
+          orientationIsVertical: c.section.orientationIsVertical
         });
       }
     } else {
@@ -186,7 +186,7 @@ export const customPageQuery = graphql`
         page {
           orientationIsVertical
           chunks {
-            page {
+            section {
               orientationIsVertical
               sectionColor
               chunks {

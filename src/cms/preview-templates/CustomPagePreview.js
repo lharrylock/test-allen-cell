@@ -44,7 +44,7 @@ const getChunksPreview = (widgets, getAsset, justReturnComponents) => {
     const name = w.get('name') || '?';
 
     // Lists are handled as a group of components
-    if (widgetName === 'object' && name === 'page') {
+    if (widgetName === 'object' && name === 'section') {
       if (w.getIn([name, 'chunks'])) {
         result.push({
           components: getChunksPreview(w.getIn([name, 'chunks']).filter(w => !!w), getAsset, true),

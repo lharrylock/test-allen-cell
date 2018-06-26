@@ -36,7 +36,7 @@ collections:
             label: "Page Sections"
             widget: "list"
             types:
-              - name: "page"
+              - name: "section"
                 label: "Page Section"
                 widget: "object"
                 fields:
@@ -45,8 +45,8 @@ collections:
                     label: "Section Color"
                     widget: "color"
                   - name: "chunks"
-                    label: "Page Sections"
-                    label_singular: "Page Section Group Item"
+                    label: "Page Section Items"
+                    label_singular: "Page Section Item"
                     widget: "list"
                     types:
                       - {label: "Text", name: "text", widget: "text"}
