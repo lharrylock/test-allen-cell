@@ -19,6 +19,42 @@ collections:
       - {label: "Body", name: "body", widget: "markdown"}
       - {label: "Tags", name: "tags", widget: "list"}
 
+  - name: "custom-page"
+    label: "Custom Page"
+    folder: "src/pages/custom-pages"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Template Key", name: "templateKey", widget: "hidden", default: "custom-page"}
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - name: "page"
+        label: "Page Layout"
+        widget: "object"
+        fields:
+          - {label: "Stack Page Sections Vertically", name: "orientationIsVertical", widget: "boolean"}
+          - name: "chunks"
+            label: "Page Sections"
+            widget: "list"
+            fields:
+              - {label: "Stack Page Sections Vertically", name: "orientationIsVertical", widget: "boolean"}
+              - name: "sectionColor"
+                label: "Section Color"
+                widget: "color"
+              - name: "chunks"
+                label: "Page Section Items"
+                label_singular: "Page Section Item"
+                widget: "list"
+                types:
+                  - {label: "Text", name: "text", widget: "text"}
+                  - label: "Image and Caption"
+                    name: "imageAndCaption"
+                    widget: "object"
+                    fields:
+                      - {label: "Image", name: "image", widget: "image"}
+                      - {label: "Caption", name: "caption", widget: "text"}
+                  - {label: "Markdown", name: "markdown", widget: "markdown"}
+
   - name: "pages"
     label: "Pages"
     files:

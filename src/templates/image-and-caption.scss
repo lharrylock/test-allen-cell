@@ -1,0 +1,13 @@
+.image-and-caption {
+  text-align: center;
+
+  .image {
+    display: inline-block;
+  }
+
+  .caption {
+    text-align: justify;
+    color: grey;
+    font-size: 16px;
+  }
+}
