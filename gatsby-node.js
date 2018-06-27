@@ -17,7 +17,6 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
             frontmatter {
               tags
               templateKey
-              title
             }
           }
         }
@@ -32,17 +31,9 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
     const posts = result.data.allMarkdownRemark.edges
 
     posts.forEach(edge => {
-
-      let pagePath = edge.node.fields.slug;
-      // todo: this feels hacky - refactor later
-      // also: replace any illegal characters
-      if (edge.node.frontmatter.templateKey === 'custom-page') {
-        pagePath = `/${edge.node.frontmatter.title.toLowerCase()}/`;
-        console.log(pagePath)
-      }
       const id = edge.node.id
       createPage({
-        path: pagePath,
+        path: edge.node.fields.slug,
         tags: edge.node.frontmatter.tags,
         component: path.resolve(
           `src/templates/${String(edge.node.frontmatter.templateKey)}.js`
@@ -53,12 +44,6 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
         },
       })
     })
-
-    // create custom page base
-    createPage({
-      path: 'custom-pages',
-      component: path.resolve(`src/templates/custom-pages.js`)
-    });
 
     // Tag pages:
     let tags = []
