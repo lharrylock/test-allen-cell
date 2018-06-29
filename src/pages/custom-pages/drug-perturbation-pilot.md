@@ -56,14 +56,26 @@ page:
               (Cell membrane, magenta) and imaged with a Zeiss spinning disk
               (Yokogawa CSU-X) confocal and Hamamatsu Orca-Flash4.0 V2 CMOS
               camera. Results were aggregated into a matrix.
-            image: /img/flavor_wheel.jpg
+            image: /img/drug-pertubation-1_orig.png
           label: Image and Caption
           name: imageAndCaption
           widget: object
-        - label: Text
-          name: text
-          text: Target Conditions
-          widget: text
+        - label: Markdown
+          markdown: |-
+            ## Target Conditions
+
+
+
+            <--- Table Goes Here -->
+
+
+
+            Table. List of well-characterized drugs used in this pilot study.
+          name: markdown
+          widget: markdown
+      orientationIsVertical: true
+      sectionColor: white
+    - chunks:
         - fields:
             - label: Image
               name: image
@@ -72,21 +84,25 @@ page:
               name: caption
               widget: text
           imageAndCaption:
-            caption: asdf
-            image: /img/products-grid2.jpg
+            caption: Image 1
+            image: /img/coffee-gear.png
           label: Image and Caption
           name: imageAndCaption
           widget: object
-      orientationIsVertical: false
-      sectionColor: red
-    - chunks:
-        - label: Markdown
-          markdown: |-
-            * point 1
-            * point 2
-          name: markdown
-          widget: markdown
+        - fields:
+            - label: Image
+              name: image
+              widget: image
+            - label: Caption
+              name: caption
+              widget: text
+          imageAndCaption:
+            caption: Image 2
+            image: /img/coffee.png
+          label: Image and Caption
+          name: imageAndCaption
+          widget: object
       sectionColor: mint
-  orientationIsVertical: false
+  orientationIsVertical: true
 ---
 
