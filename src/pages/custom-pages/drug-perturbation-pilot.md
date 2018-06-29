@@ -77,7 +77,7 @@ page:
           label: Image and Caption
           name: imageAndCaption
           widget: object
-      orientationIsVertical: true
+      orientationIsVertical: false
       sectionColor: red
     - chunks:
         - label: Markdown
@@ -86,6 +86,7 @@ page:
             * point 2
           name: markdown
           widget: markdown
-  orientationIsVertical: true
+      sectionColor: mint
+  orientationIsVertical: false
 ---
 
